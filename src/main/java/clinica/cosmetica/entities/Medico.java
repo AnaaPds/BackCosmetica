@@ -16,6 +16,7 @@ public class Medico {
     private String especialidade;
     private String email;
     private String telefone;
+    private String senha;
     
     
 	public Long getId() {
@@ -48,6 +49,13 @@ public class Medico {
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
+	public String getSenha() {
+		return senha;
+	}
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
     
     
+	
 }

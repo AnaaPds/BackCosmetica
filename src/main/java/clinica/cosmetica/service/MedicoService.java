@@ -1,49 +1,52 @@
 package clinica.cosmetica.service;
 
-import java.util.List;
+import java.util.Date;
+import java.util.Optional;
 
+import javax.crypto.SecretKey;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import clinica.cosmetica.dto.MedicoDTO;
 import clinica.cosmetica.entities.Medico;
 import clinica.cosmetica.repository.MedicoRepository;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Service
 public class MedicoService {
 
-	 private final MedicoRepository repository;
+    @Autowired
+    private MedicoRepository medicoRepository;
 
-	    public MedicoService(MedicoRepository repository) {
-	        this.repository = repository;
-	    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-	    public Medico salvar(Medico medico) {
-	        return repository.save(medico);
-	    }
+    // Chave segura gerada automaticamente para HS256
+    private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-	    public List<Medico> listarTodos() {
-	        return repository.findAll();
-	    }
+    public Medico salvar(Medico medico) {
+        medico.setSenha(passwordEncoder.encode(medico.getSenha()));
+        return medicoRepository.save(medico);
+    }
 
-	    // Conversão: Entity -> DTO
-	    public MedicoDTO toDTO(Medico medico) {
-	        MedicoDTO dto = new MedicoDTO();
-	        dto.setId(medico.getId());
-	        dto.setNome(medico.getNome());
-	        dto.setEspecialidade(medico.getEspecialidade());
-	        dto.setEmail(medico.getEmail());
-	        dto.setTelefone(medico.getTelefone());
-	        return dto;
-	    }
+    public String autenticar(String email, String senha) {
+        Optional<Medico> medicoOpt = medicoRepository.findByEmail(email);
 
-	    // Conversão: DTO -> Entity
-	    public Medico toEntity(MedicoDTO dto) {
-	        Medico medico = new Medico();
-	        medico.setId(dto.getId());
-	        medico.setNome(dto.getNome());
-	        medico.setEspecialidade(dto.getEspecialidade());
-	        medico.setEmail(dto.getEmail());
-	        medico.setTelefone(dto.getTelefone());
-	        return medico;
-	    }
-	}
+        if (medicoOpt.isPresent()) {
+            Medico medico = medicoOpt.get();
+            if (passwordEncoder.matches(senha, medico.getSenha())) {
+                // Criar token JWT válido por 24 horas
+                return Jwts.builder()
+                    .setSubject(email)
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 24h
+                    .signWith(key)
+                    .compact();
+            }
+        }
+        return null; // Falha na autenticação
+    }
+}

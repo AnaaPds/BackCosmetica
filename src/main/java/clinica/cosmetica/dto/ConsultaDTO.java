@@ -5,79 +5,92 @@ import java.time.LocalDate;
 import clinica.cosmetica.entities.Consulta;
 
 public class ConsultaDTO {
-	 private Long id;
-	    private LocalDate dataConsulta;
-	    private Long pacienteId;
-	    private String nomePaciente;
-	    private Long medicoId;
-	    private String nomeMedico;
+    private Long id;
+    private LocalDate dataConsulta;
+    private Long pacienteId;
+    private String nomePaciente;
+    private Long medicoId;
+    private String nomeMedico;
+    private String especialidade;
 
-	    public ConsultaDTO() {
-	    }
+    public ConsultaDTO() {
+    }
 
-	    public ConsultaDTO(Long id, LocalDate dataConsulta, Long pacienteId, String nomePaciente, Long medicoId, String nomeMedico) {
-	        this.id = id;
-	        this.dataConsulta = dataConsulta;
-	        this.pacienteId = pacienteId;
-	        this.nomePaciente = nomePaciente;
-	        this.medicoId = medicoId;
-	        this.nomeMedico = nomeMedico;
-	    }
+    public ConsultaDTO(Long id, LocalDate dataConsulta, Long pacienteId, String nomePaciente, Long medicoId, String nomeMedico, String especialidade) {
+        this.id = id;
+        this.dataConsulta = dataConsulta;
+        this.pacienteId = pacienteId;
+        this.nomePaciente = nomePaciente;
+        this.medicoId = medicoId;
+        this.nomeMedico = nomeMedico;
+        this.especialidade = especialidade;
+    }
 
-	    public ConsultaDTO(Consulta entity) {
-	        id = entity.getId();
-	        dataConsulta = entity.getDataConsulta();
-	        pacienteId = entity.getPaciente().getId();
-	        nomePaciente = entity.getPaciente().getNome();
-	        medicoId = entity.getMedico().getId();
-	        nomeMedico = entity.getMedico().getNome();
-	    }
+    public ConsultaDTO(Consulta entity) {
+        this.id = entity.getId();
+        this.dataConsulta = entity.getData();
+        this.pacienteId = entity.getPaciente().getId();
+        this.nomePaciente = entity.getPaciente().getNome();
+        this.medicoId = entity.getMedico().getId();
+        this.nomeMedico = entity.getMedico().getNome();
+        this.especialidade = entity.getMedico().getEspecialidade();
+    }
 
-	    public Long getId() {
-	        return id;
-	    }
+    // Getters e Setters
 
-	    public void setId(Long id) {
-	        this.id = id;
-	    }
+    public Long getId() {
+        return id;
+    }
 
-	    public LocalDate getDataConsulta() {
-	        return dataConsulta;
-	    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	    public void setDataConsulta(LocalDate dataConsulta) {
-	        this.dataConsulta = dataConsulta;
-	    }
+    public LocalDate getDataConsulta() {
+        return dataConsulta;
+    }
 
-	    public Long getPacienteId() {
-	        return pacienteId;
-	    }
+    public void setDataConsulta(LocalDate dataConsulta) {
+        this.dataConsulta = dataConsulta;
+    }
 
-	    public void setPacienteId(Long pacienteId) {
-	        this.pacienteId = pacienteId;
-	    }
+    public Long getPacienteId() {
+        return pacienteId;
+    }
 
-	    public String getNomePaciente() {
-	        return nomePaciente;
-	    }
+    public void setPacienteId(Long pacienteId) {
+        this.pacienteId = pacienteId;
+    }
 
-	    public void setNomePaciente(String nomePaciente) {
-	        this.nomePaciente = nomePaciente;
-	    }
+    public String getNomePaciente() {
+        return nomePaciente;
+    }
 
-	    public Long getMedicoId() {
-	        return medicoId;
-	    }
+    public void setNomePaciente(String nomePaciente) {
+        this.nomePaciente = nomePaciente;
+    }
 
-	    public void setMedicoId(Long medicoId) {
-	        this.medicoId = medicoId;
-	    }
+    public Long getMedicoId() {
+        return medicoId;
+    }
 
-	    public String getNomeMedico() {
-	        return nomeMedico;
-	    }
+    public void setMedicoId(Long medicoId) {
+        this.medicoId = medicoId;
+    }
 
-	    public void setNomeMedico(String nomeMedico) {
-	        this.nomeMedico = nomeMedico;
-	    }
+    public String getNomeMedico() {
+        return nomeMedico;
+    }
+
+    public void setNomeMedico(String nomeMedico) {
+        this.nomeMedico = nomeMedico;
+    }
+
+    public String getEspecialidade() {
+        return especialidade;
+    }
+
+    public void setEspecialidade(String especialidade) {
+        this.especialidade = especialidade;
+    }
 	}

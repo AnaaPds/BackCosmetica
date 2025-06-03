@@ -9,16 +9,18 @@ public class MedicoDTO {
 	    private String especialidade;
 	    private String email;
 	    private String telefone;
+	    private String senha;
 	    
 		public MedicoDTO() {
 		}
 		
-		public MedicoDTO(Long id, String nome, String especialidade, String email, String telefone) {
+		public MedicoDTO(Long id, String nome, String especialidade, String email, String telefone, String senha) {
 			this.id = id;
 			this.nome = nome;
 			this.especialidade = especialidade;
 			this.email = email;
 			this.telefone = telefone;
+			this.senha = senha;
 		}
 
 		public MedicoDTO(Medico entity) {
@@ -27,6 +29,7 @@ public class MedicoDTO {
 			especialidade = entity.getEspecialidade();
 			email = entity.getEmail();
 			telefone = entity.getTelefone();
+			senha = entity.getSenha();
 		}
 
 
@@ -60,6 +63,14 @@ public class MedicoDTO {
 		}
 		public void setTelefone(String fone) {
 			this.telefone = fone;
+		}
+
+		public String getSenha() {
+			return senha;
+		}
+
+		public void setSenha(String senha) {
+			this.senha = senha;
 		}
 	    
 	    

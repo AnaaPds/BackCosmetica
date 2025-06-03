@@ -1,5 +1,6 @@
 package clinica.cosmetica.entities;
 
+
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
@@ -15,7 +16,7 @@ public class Consulta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate dataConsulta;
+    private LocalDate data;
 
     @ManyToOne
     private Paciente paciente;
@@ -23,44 +24,35 @@ public class Consulta {
     @ManyToOne
     private Medico medico;
 
-	public Long getmedicoId;
+    public Long getId() {
+        return id;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public LocalDate getData() {
+        return data;
+    }
 
-	public LocalDate getDataConsulta() {
-		return dataConsulta;
-	}
+    public void setData(LocalDate data) {
+        this.data = data;
+    }
 
-	public void setDataConsulta(LocalDate dataConsulta) {
-		this.dataConsulta = dataConsulta;
-	}
+    public Paciente getPaciente() {
+        return paciente;
+    }
 
-	public Paciente getPaciente() {
-		return paciente;
-	}
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
 
-	public void setPaciente(Paciente paciente) {
-		this.paciente = paciente;
-	}
+    public Medico getMedico() {
+        return medico;
+    }
 
-	public Medico getMedico() {
-		return medico;
-	}
-
-	public void setMedico(Medico medico) {
-		this.medico = medico;
-	}
-
-	public Long getPacienteId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-    
-    
+    public void setMedico(Medico medico) {
+        this.medico = medico;
+    }
 }

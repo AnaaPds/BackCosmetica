@@ -1,53 +1,35 @@
 package clinica.cosmetica.controller;
 
-
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import clinica.cosmetica.entities.Paciente;
-import clinica.cosmetica.repository.PacienteRepository;
+import clinica.cosmetica.service.PacienteService;
 
 @RestController
 @RequestMapping("/pacientes")
 public class PacienteController {
 
     @Autowired
-    private PacienteRepository pacienteRepository;
+    private PacienteService pacienteService;
 
-    @GetMapping
-    public List<Paciente> listarPacientes() {
-        return pacienteRepository.findAll();
+    @PostMapping("/cadastro")
+    public ResponseEntity<Paciente> cadastrarPaciente(@RequestBody Paciente paciente) {
+        Paciente salvo = pacienteService.salvar(paciente);
+        return ResponseEntity.ok(salvo);
     }
 
-    @PostMapping
-    public Paciente criarPaciente(@RequestBody Paciente paciente) {
-        System.out.println("Data recebida no backend: " + paciente.getDataNasc());
-        return pacienteRepository.save(paciente);
-    }
-
-
-    @GetMapping("/{id}")
-    public Paciente buscarPaciente(@PathVariable Long id) {
-        return pacienteRepository.findById(id).orElse(null);
-    }
-
-    @PutMapping("/{id}")
-    public Paciente atualizarPaciente(@PathVariable Long id, @RequestBody Paciente paciente) {
-        paciente.setId(id);
-        return pacienteRepository.save(paciente);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deletarPaciente(@PathVariable Long id) {
-        pacienteRepository.deleteById(id);
+    @PostMapping("/login")
+    public ResponseEntity<?> loginPaciente(@RequestBody Paciente paciente) {
+        String token = pacienteService.autenticar(paciente.getEmail(), paciente.getSenha());
+        if (token != null) {
+            return ResponseEntity.ok("Login realizado com sucesso!");
+        } else {
+            return ResponseEntity.status(401).body("Email ou senha inválidos");
+        }
     }
 }
