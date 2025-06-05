@@ -1,0 +1,35 @@
+package clinica.cosmetica.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import clinica.cosmetica.entities.Paciente;
+import clinica.cosmetica.service.PacienteService;
+
+@RestController
+@RequestMapping("/pacientes")
+public class PacienteController {
+
+    // Injeta o serviço de pacientes
+    @Autowired
+    private PacienteService pacienteService;
+
+    // Cadastra um paciente novo
+    @PostMapping("/cadastro")
+    public ResponseEntity<Paciente> cadastrarPaciente(@RequestBody Paciente paciente) {
+        Paciente salvo = pacienteService.salvar(paciente);
+        return ResponseEntity.ok(salvo);
+    }
+
+    // Realiza autenticação do paciente
+    @PostMapping("/login")
+    public ResponseEntity<?> loginPaciente(@RequestBody Paciente paciente) {
+        String token = pacienteService.autenticar(paciente.getEmail(), paciente.getSenha());
+        if (token != null) {
+            return ResponseEntity.ok("Login realizado com sucesso!");
+        } else {
+            return ResponseEntity.status(401).body("Email ou senha inválidos");
+        }
+    }
+}

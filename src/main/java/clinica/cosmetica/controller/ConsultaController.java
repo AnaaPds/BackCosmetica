@@ -1,0 +1,93 @@
+package clinica.cosmetica.controller;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import clinica.cosmetica.dto.ConsultaDTO;
+import clinica.cosmetica.entities.Consulta;
+import clinica.cosmetica.service.ConsultaService;
+
+@RestController
+@RequestMapping("/consultas")
+public class ConsultaController {
+
+    // Injeta o serviço de consultas
+    @Autowired
+    private ConsultaService consultaService;
+
+    // Retorna todas as consultas
+    @GetMapping
+    public List<ConsultaDTO> listarTodas() {
+        return consultaService.listarTodas();
+    }
+
+    // Busca consulta por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<ConsultaDTO> buscarPorId(@PathVariable Long id) {
+        return consultaService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Cadastra nova consulta
+    @PostMapping
+    public ResponseEntity<ConsultaDTO> salvar(@RequestBody ConsultaDTO dto) {
+        Consulta consultaSalva = consultaService.salvar(dto);
+        return ResponseEntity.ok(new ConsultaDTO(consultaSalva));
+    }
+
+    // Atualiza consulta existente
+    @PutMapping("/{id}")
+    public ResponseEntity<ConsultaDTO> atualizar(@PathVariable Long id, @RequestBody ConsultaDTO dto) {
+        try {
+            Consulta atualizada = consultaService.atualizar(id, dto);
+            return ResponseEntity.ok(new ConsultaDTO(atualizada));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Remove consulta pelo ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        consultaService.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // Filtra por nome do profissional
+    @GetMapping("/profissional")
+    public List<ConsultaDTO> buscarPorProfissional(@RequestParam String nome) {
+        return consultaService.buscarPorProfissional(nome);
+    }
+
+    // Filtra por especialidade
+    @GetMapping("/especialidade")
+    public List<ConsultaDTO> buscarPorEspecialidade(@RequestParam String especialidade) {
+        return consultaService.buscarPorEspecialidade(especialidade);
+    }
+
+    // Filtra por data
+    @GetMapping("/data")
+    public List<ConsultaDTO> buscarPorData(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+        return consultaService.buscarPorData(data);
+    }
+
+    // Filtra por profissional e data
+    @GetMapping("/profissional-data")
+    public List<ConsultaDTO> buscarPorProfissionalEData(@RequestParam String nome,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+        return consultaService.buscarPorProfissionalEData(nome, data);
+    }
+
+    // Filtra por especialidade e data
+    @GetMapping("/especialidade-data")
+    public List<ConsultaDTO> buscarPorEspecialidadeEData(@RequestParam String especialidade,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+        return consultaService.buscarPorEspecialidadeEData(especialidade, data);
+    }
+}
