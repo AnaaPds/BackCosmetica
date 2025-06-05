@@ -26,6 +26,7 @@ public class RelatorioConsultaService {
     @Autowired
     private MedicoRepository medicoRepository;
 
+<<<<<<< HEAD
     // Gera relatório PDF para um profissional
     public byte[] gerarPdfRelatorioPorProfissional(Long medicoId) throws DocumentException {
         // Busca médico pelo ID
@@ -65,6 +66,25 @@ public class RelatorioConsultaService {
         document.add(new Paragraph(" "));
 
         // Itera sobre consultas e adiciona informações
+=======
+    public byte[] gerarPdfRelatorioPorProfissional(Long medicoId) throws DocumentException {
+        Optional<Medico> medicoOpt = medicoRepository.findById(medicoId);
+        String nomeMedico = medicoOpt.map(Medico::getNome).orElse("Profissional não encontrado");
+        String especialidadeMedico = medicoOpt.map(Medico::getEspecialidade).orElse("Especialidade não informada");
+
+        List<Consulta> consultas = consultaRepository.findByMedicoId(medicoId);
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Document document = new Document();
+        PdfWriter.getInstance(document, out);
+        document.open();
+
+        document.add(new Paragraph("Relatório de Consultas do Profissional: " + nomeMedico));
+        document.add(new Paragraph("Especialidade: " + especialidadeMedico));
+        document.add(new Paragraph("Total de Consultas: " + consultas.size()));
+        document.add(new Paragraph(" "));
+
+>>>>>>> af3506727525665f87d5b676e754d1c05ce51add
         for (Consulta consulta : consultas) {
             String data = (consulta.getData() != null) ? consulta.getData().toString() : "Data não informada";
 
@@ -72,6 +92,7 @@ public class RelatorioConsultaService {
                     ? consulta.getPaciente().getNome() : "Paciente não informado";
 
             String linha = "Data: " + data + ", Paciente: " + paciente;
+<<<<<<< HEAD
 
             // Adiciona a linha ao PDF
             document.add(new Paragraph(linha));
@@ -81,6 +102,12 @@ public class RelatorioConsultaService {
         document.close();
 
         // Retorna PDF como array de bytes
+=======
+            document.add(new Paragraph(linha));
+        }
+
+        document.close();
+>>>>>>> af3506727525665f87d5b676e754d1c05ce51add
         return out.toByteArray();
     }
 }
