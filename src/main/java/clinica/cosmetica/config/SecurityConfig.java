@@ -20,11 +20,11 @@ public class SecurityConfig {
         return http.build();
     }
 
-<<<<<<< HEAD
+
  // Bean para criptografar senhas com BCrypt
-=======
+
     // Disponibiliza o encoder para uso em serviços (como no PacienteService)
->>>>>>> af3506727525665f87d5b676e754d1c05ce51add
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
